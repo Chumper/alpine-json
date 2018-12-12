@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -24,14 +25,26 @@ type fileInfo struct {
 	Arch    string `json:"arch"`
 }
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 func main() {
 	// Create a new cli program.
 	// Setup the global flags.
 	arch := flag.String("arch", "", "Set the arch to use")
 	branch := flag.String("branch", "", "Set the branch to use")
 	repo := flag.String("repo", "", "Set the repository to search in")
+	isVersion := flag.Bool("version", false, "Returns the version of the tool")
 
 	flag.Parse()
+
+	if *isVersion {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 
 	if len(flag.Args()) < 1 {
 		panic(errors.New("must pass a package to search for"))
